@@ -122,32 +122,35 @@
 <button onclick="addRow()">Ajouter une partie</button>
 <button onclick="calculate()">Recalculer</button>
 <button onclick="resetTable()">Réinitialiser</button>
+<div class="flex-row-2">
+    
+    <div class="section box-50">
+        <h3>Nombre de parties</h3>
+        <table>
+            <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
+            <tr>
+                <td id="nbClassique">0</td>
+                <td id="nbRapide">0</td>
+                <td id="nbBlitz">0</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section box-50">
+        <h3>Coefficients K</h3>
+        <table>
+            <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
+            <tr>
+                <td id="kClassique">-</td>
+                <td id="kRapide">-</td>
+                <td id="kBlitz">-</td>
+            </tr>
+        </table>
+    </div>
 
 </div>
 
-<h3>Nombre de parties</h3>
-<div class="section">
-    <table>
-        <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
-        <tr>
-            <td id="nbClassique">0</td>
-            <td id="nbRapide">0</td>
-            <td id="nbBlitz">0</td>
-        </tr>
-    </table>
-</div>
 
-<h3>Coefficients K</h3>
-<div class="section">
-    <table>
-        <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
-        <tr>
-            <td id="kClassique">-</td>
-            <td id="kRapide">-</td>
-            <td id="kBlitz">-</td>
-        </tr>
-    </table>
-</div>
 <script>
 let count = 0;
 
@@ -259,6 +262,7 @@ function resetTable() {
 
 </body>
 </html>
+
 
 
 
