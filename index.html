@@ -45,7 +45,7 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo v26.11.2025 18:12</h1>
+<h1>Calculatrice Elo v26.11.2025 18:16</h1>
 
 <!-- ========= LIGNE 1 — Élos initiaux + Nouveaux Élos ========= -->
 <div class="row">
@@ -210,8 +210,7 @@ function calculate(){
     let cad = r.querySelector(".cadence").value;
     let K = cad === "classique" ? kC : cad === "rapide" ? kR : kB;
 
-    // --- E calculé puis arrondi EXACTEMENT à 2 décimales pour éviter les erreurs flottantes
-    let Eraw = 1 / (1 + Math.pow(10, (adv - cur[cad]) / 400));
+   let Eraw = 1/(1+Math.pow(10,(adv-base[cad])/400));
     let E = Number(Eraw.toFixed(2));  
 
     r.querySelector(".E").textContent = E.toFixed(2);
@@ -257,6 +256,7 @@ document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",ca
 
 </body>
 </html>
+
 
 
 
