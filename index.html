@@ -30,7 +30,7 @@
     /* LAYOUT LIGNES */
     .row { display:flex; justify-content:space-between; gap:25px; margin-bottom:35px; }
     .col-50 { width:48%; }
-    .col-30 { width:30%; }
+    .col-30 { width:20%; }
     .col-70 { width:68%; }
 
     .small-box { width:48%; }
@@ -75,7 +75,7 @@
 <div class="row">
 
     <!-- Options -->
-    <div class="section col-30">
+   <div class="section col-30 options-box">
         <h3>Options</h3>
         <label><input type="checkbox" id="mineur"> Je suis né en 2007 ou après</label>
         <label><input type="checkbox" class="is2400" value="classique"> Déjà 2400 en Classique</label>
@@ -244,3 +244,4 @@ document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",ca
 
 </body>
 </html>
+
