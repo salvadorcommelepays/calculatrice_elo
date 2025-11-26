@@ -24,7 +24,10 @@
     justify-content: space-between;
     gap: 20px;
 }
-
+.table-new-elo {
+    border: 3px solid red;
+    border-radius: 8px;
+}
 .elo-box {
     width: 48%;
 }
@@ -44,7 +47,7 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo FIDE v16:45</h1>
+<h1>Calculatrice Elo FIDE v16:53</h1>
 <div class="flex-row">
 
     <div class="section elo-box">
@@ -59,9 +62,9 @@
         </table>
     </div>
 
-    <div class="section elo-box">
-        <h3>Nouveaux Élos</h3>
-        <table>
+   <div class="section elo-box">
+    <h3>Nouveaux Élos</h3>
+    <table class="table-new-elo">
             <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
             <tr>
                 <td id="newEloClassique">-</td>
@@ -256,6 +259,7 @@ function resetTable() {
 
 </body>
 </html>
+
 
 
 
