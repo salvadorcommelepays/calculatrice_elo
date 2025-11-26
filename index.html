@@ -19,39 +19,21 @@
     .elo-red { color:red; font-weight:bold; }
     button { padding:10px 15px; background:#1976d2; color:white; border:none; border-radius:6px; cursor:pointer; font-size:16px; margin-right:10px; }
     button:hover { background:#0f5cad; }
-    .flex-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-.table-new-elo {
-    border: 3px solid red;
-    border-radius: 8px;
-}
-.elo-box {
-    width: 48%;
-}
-.flex-row-2 {
-    display: flex;
-    justify-content: space-between;
-    gap: 25px;
-    align-items: stretch;
-}
-
-.box-50 {
-    width: 48%;
-}
+    .flex-row { display:flex; justify-content:space-between; gap:20px; }
+    .flex-row-2 { display:flex; justify-content:space-between; gap:25px; align-items:stretch; }
+    .elo-box, .box-50 { width:48%; }
+    .table-new-elo { border:3px solid red; border-radius:8px; }
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo FIDE v16:59</h1>
-<div class="flex-row">
+<h1>Calculatrice Elo FIDE Auto</h1>
 
+<div class="flex-row">
     <div class="section elo-box">
-        <h3>Élos initiaux (A REMPLIR)</h3>
+        <h3>Élos initiaux</h3>
         <table>
             <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
             <tr>
@@ -62,9 +44,9 @@
         </table>
     </div>
 
-   <div class="section elo-box">
-    <h3>Nouveaux Élos</h3>
-    <table class="table-new-elo">
+    <div class="section elo-box">
+        <h3>Nouveaux Élos</h3>
+        <table class="table-new-elo">
             <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
             <tr>
                 <td id="newEloClassique">-</td>
@@ -73,34 +55,24 @@
             </tr>
         </table>
     </div>
+</div>
 
-    </div>
 <div class="flex-row-2">
-
-    <!-- OPTIONS (COCHER SI CONCERNÉ) -->
     <div class="section box-50">
         <h3>Options</h3>
-
-        <label><input type="checkbox" id="mineur"> Je suis né en 2007 ou après (2008-2025)</label>
-        <label><input type="checkbox" class="is2400" value="classique"> J'ai déjà eu 2400 en Classique</label>
-        <label><input type="checkbox" class="is2400" value="rapide"> J'ai déjà eu 2400 en Rapide</label>
-        <label><input type="checkbox" class="is2400" value="blitz"> J'ai déjà eu 2400 en Blitz</label>
+        <label><input type="checkbox" id="mineur"> Je suis né en 2007 ou après</label>
+        <label><input type="checkbox" class="is2400" value="classique"> Déjà 2400 en Classique</label>
+        <label><input type="checkbox" class="is2400" value="rapide"> Déjà 2400 en Rapide</label>
+        <label><input type="checkbox" class="is2400" value="blitz"> Déjà 2400 en Blitz</label>
     </div>
 
-    <!-- FONCTIONNEMENT -->
     <div class="section box-50" style="background:#fff7d6;border-left:4px solid #ffb300;">
         <h3>Fonctionnement</h3>
-        <p style="margin:0;font-size:15px;">
-            Veuillez entrer vos elos actuels dans le tableau en haut à gauche, cocher les options vous concernant et descendre  pour remplir les parties du mois <br><br>
-            Attention : en cas de tournois joués à la fin du mois précédent, il se peut qu'un elo différent soit utilisé pour ces tournois précis. Nous vous recommandons de les calculer à part.
-        </p>
+        Entrez vos élos puis ajoutez vos parties ci-dessous. Tout se calcule automatiquement.
     </div>
-
 </div>
+
 <h3>Parties du mois</h3>
-<p style="margin-top:-10px;margin-bottom:15px;font-size:14px;color:#555;">
-    Renseignez ici, une par une, les parties jouées pendant le mois sélectionné.
-</p>
 
 <table id="tableParties">
     <thead>
@@ -109,10 +81,10 @@
             <th>Elo Adv</th>
             <th>Résultat</th>
             <th>Cadence</th>
-            <th>Note (Optionnel)</th>
-            <th>E (proba)</th>
+            <th>Note</th>
+            <th>E</th>
             <th>K</th>
-            <th>Δ Elo</th>
+            <th>Δ</th>
             <th>Elo après</th>
         </tr>
     </thead>
@@ -120,10 +92,9 @@
 </table>
 
 <button onclick="addRow()">Ajouter une partie</button>
-<button onclick="calculate()">Recalculer</button>
 <button onclick="resetTable()">Réinitialiser</button>
+
 <div class="flex-row-2">
-    
     <div class="section box-50">
         <h3>Nombre de parties</h3>
         <table>
@@ -147,33 +118,26 @@
             </tr>
         </table>
     </div>
-
 </div>
 
-
 <script>
-let count = 0;
+let count=0;
 
-function computeK(cadence, n, mineur, list2400) {
-    if (list2400.includes(cadence)) return 10;
-    let base = mineur ? 40 : 20;
-    if (n === 0) return base;
-    return Math.max(10, Math.min(base, Math.floor(700 / n)));
+function computeK(c,n,m,list2400){if(list2400.includes(c))return 10;let b=m?40:20;if(n===0)return b;return Math.max(10,Math.min(b,Math.floor(700/n)));}
+
+function updateCounts(){
+    let rows=document.querySelectorAll("#tableParties tbody tr");
+    let c={classique:0,rapide:0,blitz:0};
+    rows.forEach(r=>c[r.querySelector(".cadence").value]++);
+    nbClassique.textContent=c.classique;
+    nbRapide.textContent=c.rapide;
+    nbBlitz.textContent=c.blitz;
 }
 
-function updateCounts() {
-    let rows = document.querySelectorAll("#tableParties tbody tr");
-    let c = {classique:0, rapide:0, blitz:0};
-    rows.forEach(r => c[r.querySelector(".cadence").value]++);
-    nbClassique.textContent = c.classique;
-    nbRapide.textContent = c.rapide;
-    nbBlitz.textContent = c.blitz;
-}
-
-function addRow() {
+function addRow(){
     count++;
-    let tr = document.createElement("tr");
-    tr.innerHTML = `
+    let tr=document.createElement("tr");
+    tr.innerHTML=`
         <td>${count}</td>
         <td><input type="number" class="eloAdv"></td>
         <td><select class="resultat"><option value="1">Victoire</option><option value="0.5">Nul</option><option value="0">Défaite</option></select></td>
@@ -185,102 +149,73 @@ function addRow() {
         <td class="eloApres"></td>
     `;
     tableParties.querySelector("tbody").appendChild(tr);
-
-    tr.querySelector(".cadence").addEventListener("change", calculate);
+    tr.querySelectorAll("input,select").forEach(el=>el.addEventListener("input",calculate));
     calculate();
 }
 
-function calculate() {
+function calculate(){
     updateCounts();
 
-    // valeurs des checkboxes
-    let mineurVal = mineur.checked;
-    let list2400 = Array.from(document.querySelectorAll(".is2400:checked")).map(x => x.value);
+    let m=mineur.checked;
+    let list2400=Array.from(document.querySelectorAll(".is2400:checked")).map(x=>x.value);
 
-    // comptage des parties par cadence
-    let rows = document.querySelectorAll("#tableParties tbody tr");
-    let countCad = {classique:0, rapide:0, blitz:0};
-    rows.forEach(r => countCad[r.querySelector(".cadence").value]++);
+    let rows=document.querySelectorAll("#tableParties tbody tr");
+    let countCad={classique:0,rapide:0,blitz:0};
+    rows.forEach(r=>countCad[r.querySelector(".cadence").value]++);
 
-    // calcul des coefficients K par cadence
-    let kC = computeK("classique", countCad.classique, mineurVal, list2400);
-    let kR = computeK("rapide", countCad.rapide, mineurVal, list2400);
-    let kB = computeK("blitz", countCad.blitz, mineurVal, list2400);
+    let kC=computeK("classique",countCad.classique,m,list2400);
+    let kR=computeK("rapide",countCad.rapide,m,list2400);
+    let kB=computeK("blitz",countCad.blitz,m,list2400);
 
-    kClassique.textContent = kC;
-    kRapide.textContent = kR;
-    kBlitz.textContent = kB;
+    kClassique.textContent=kC;
+    kRapide.textContent=kR;
+    kBlitz.textContent=kB;
 
-    // Élos initiaux
-    let base = {
-        classique: parseInt(eloClassique.value) || 0,
-        rapide: parseInt(eloRapide.value) || 0,
-        blitz: parseInt(eloBlitz.value) || 0
+    let base={
+        classique:parseInt(eloClassique.value)||0,
+        rapide:parseInt(eloRapide.value)||0,
+        blitz:parseInt(eloBlitz.value)||0
     };
 
-    let cur = {...base};
+    let cur={...base};
 
-    // calcul partie par partie
-    rows.forEach(r => {
-        let adv = parseInt(r.querySelector(".eloAdv").value);
-        if (isNaN(adv)) return;
-
-        let S = parseFloat(r.querySelector(".resultat").value);
-        let cad = r.querySelector(".cadence").value;
-
-        let K = cad === "classique" ? kC : cad === "rapide" ? kR : kB;
-
-        let E = 1 / (1 + Math.pow(10, (adv - cur[cad]) / 400));
-        r.querySelector(".E").textContent = E.toFixed(3);
-        r.querySelector(".K").textContent = K;
-
-        let d = Math.round(K * (S - E));
-        r.querySelector(".delta").textContent = d;
-
-        cur[cad] += d;
-        r.querySelector(".eloApres").textContent = cur[cad];
+    rows.forEach(r=>{
+        let adv=parseInt(r.querySelector(".eloAdv").value);
+        if(isNaN(adv))return;
+        let S=parseFloat(r.querySelector(".resultat").value);
+        let cad=r.querySelector(".cadence").value;
+        let K=cad==="classique"?kC:cad==="rapide"?kR:kB;
+        let E=1/(1+Math.pow(10,(adv-cur[cad])/400));
+        r.querySelector(".E").textContent=E.toFixed(3);
+        r.querySelector(".K").textContent=K;
+        let d=Math.round(K*(S-E));
+        r.querySelector(".delta").textContent=d;
+        cur[cad]+=d;
+        r.querySelector(".eloApres").textContent=cur[cad];
     });
 
-    // mise à jour affichage final
-    newEloClassique.innerHTML = cur.classique >= base.classique ? `<span class="elo-green">${cur.classique}</span>` : `<span class="elo-red">${cur.classique}</span>`;
-    newEloRapide.innerHTML    = cur.rapide   >= base.rapide   ? `<span class="elo-green">${cur.rapide}</span>`   : `<span class="elo-red">${cur.rapide}</span>`;
-    newEloBlitz.innerHTML     = cur.blitz    >= base.blitz    ? `<span class="elo-green">${cur.blitz}</span>`    : `<span class="elo-red">${cur.blitz}</span>`;
+    newEloClassique.textContent=cur.classique;
+    newEloRapide.textContent=cur.rapide;
+    newEloBlitz.textContent=cur.blitz;
 }
 
-function resetTable() {
-    tableParties.querySelector("tbody").innerHTML = "";
-    count = 0;
-    nbClassique.textContent = 0;
-    nbRapide.textContent = 0;
-    nbBlitz.textContent = 0;
-    newEloClassique.textContent = "-";
-    newEloRapide.textContent = "-";
-    newEloBlitz.textContent = "-";
+function resetTable(){
+    tableParties.querySelector("tbody").innerHTML="";
+    count=0;
+    nbClassique.textContent=0;
+    nbRapide.textContent=0;
+    nbBlitz.textContent=0;
+    newEloClassique.textContent="-";
+    newEloRapide.textContent="-";
+    newEloBlitz.textContent="-";
 }
+
+eloClassique.addEventListener("input",calculate);
+eloRapide.addEventListener("input",calculate);
+eloBlitz.addEventListener("input",calculate);
+mineur.addEventListener("change",calculate);
+document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",calculate));
 </script>
-
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
