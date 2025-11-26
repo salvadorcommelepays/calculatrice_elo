@@ -2,18 +2,11 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Calculatrice Elo</title>
+<title>Calculatrice Elo v26.11.2025 17:39</title>
 
 <style>
     body { font-family: Arial, sans-serif; background:#eef2f7; margin:0; }
-    .container { 
-        max-width:1200px; 
-        margin:40px auto; 
-        background:white; 
-        padding:30px; 
-        border-radius:12px; 
-        box-shadow:0 0 20px rgba(0,0,0,0.1); 
-    }
+    .container { max-width:1200px; margin:40px auto; background:white; padding:30px; border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.1); }
 
     h1 { text-align:center; margin-bottom:25px; color:#333; font-size:32px; }
 
@@ -22,38 +15,23 @@
     td { padding:10px; border-bottom:1px solid #ddd; text-align:center; }
     tr:nth-child(even) { background:#f4f6f8; }
 
-    .section { background:#f8fafc; padding:15px; border-radius:8px; }
-
-    input[type="number"], select, input[type="text"] {
-        width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;
-    }
-
+    input, select { width:100%; padding:8px; border-radius:6px; border:1px solid #ccc; }
     label { font-weight:bold; display:block; margin-top:6px; }
 
     button {
-        width:100%;
-        padding:15px;
-        background:#1976d2;
-        color:white;
-        border:none;
-        border-radius:8px;
-        cursor:pointer;
-        font-size:16px;
+        width:100%; padding:15px; background:#1976d2; color:white;
+        border:none; border-radius:8px; cursor:pointer; font-size:16px; 
         margin-bottom:15px;
     }
     button:hover { background:#0f5cad; }
 
-    /* --- Layout --- */
+    .section { background:#f8fafc; padding:15px; border-radius:8px; }
 
-    .top-row, .bottom-row {
-        display:flex;
-        justify-content:space-between;
-        gap:25px;
-        margin-bottom:30px;
-    }
-
-    .left-col { width:25%; }
-    .right-col { width:72%; }
+    /* LAYOUT LIGNES */
+    .row { display:flex; justify-content:space-between; gap:25px; margin-bottom:35px; }
+    .col-50 { width:48%; }
+    .col-30 { width:30%; }
+    .col-70 { width:68%; }
 
     .small-box { width:48%; }
 
@@ -64,13 +42,40 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo v26.11.2025 17:36</h1>
+<h1>Calculatrice Elo</h1>
 
-<!-- ===================== LIGNE 1 ===================== -->
-<div class="top-row">
+<!-- ========= LIGNE 1 — Élos initiaux + Nouveaux Élos ========= -->
+<div class="row">
+    <div class="section col-50">
+        <h3>Élos initiaux</h3>
+        <table>
+            <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
+            <tr>
+                <td><input type="number" id="eloClassique"></td>
+                <td><input type="number" id="eloRapide"></td>
+                <td><input type="number" id="eloBlitz"></td>
+            </tr>
+        </table>
+    </div>
 
-    <!-- OPTIONS -->
-    <div class="section left-col">
+    <div class="section col-50">
+        <h3>Nouveaux Élos</h3>
+        <table class="table-new-elo">
+            <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
+            <tr>
+                <td id="newEloClassique">-</td>
+                <td id="newEloRapide">-</td>
+                <td id="newEloBlitz">-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- ========= LIGNE 2 — Options + Parties du mois ========= -->
+<div class="row">
+
+    <!-- Options -->
+    <div class="section col-30">
         <h3>Options</h3>
         <label><input type="checkbox" id="mineur"> Je suis né en 2007 ou après</label>
         <label><input type="checkbox" class="is2400" value="classique"> Déjà 2400 en Classique</label>
@@ -78,8 +83,8 @@
         <label><input type="checkbox" class="is2400" value="blitz"> Déjà 2400 en Blitz</label>
     </div>
 
-    <!-- PARTIES DU MOIS -->
-    <div class="right-col">
+    <!-- Parties du mois -->
+    <div class="col-70">
         <h3>Parties du mois</h3>
 
         <table id="tableParties">
@@ -105,10 +110,8 @@
 
 </div>
 
-<!-- ===================== LIGNE 2 ===================== -->
-<div class="bottom-row">
-
-    <!-- NOMBRE DE PARTIES -->
+<!-- ========= LIGNE 3 — Nombre de parties + Coefficients ========= -->
+<div class="row">
     <div class="section small-box">
         <h3>Nombre de parties</h3>
         <table>
@@ -121,7 +124,6 @@
         </table>
     </div>
 
-    <!-- COEFFICIENTS K -->
     <div class="section small-box">
         <h3>Coefficients K</h3>
         <table>
@@ -133,7 +135,6 @@
             </tr>
         </table>
     </div>
-
 </div>
 
 <script>
@@ -192,16 +193,32 @@ function calculate(){
     kRapide.textContent=kR;
     kBlitz.textContent=kB;
 
+    let base={
+        classique:parseInt(eloClassique.value)||0,
+        rapide:parseInt(eloRapide.value)||0,
+        blitz:parseInt(eloBlitz.value)||0
+    };
+
+    let cur={...base};
+
     rows.forEach(r=>{
         let adv=parseInt(r.querySelector(".eloAdv").value);
         if(isNaN(adv))return;
-
         let S=parseFloat(r.querySelector(".resultat").value);
         let cad=r.querySelector(".cadence").value;
         let K=cad==="classique"?kC:cad==="rapide"?kR:kB;
-
-        let currentElo=document.getElementById("nbClassique");
+        let E=1/(1+Math.pow(10,(adv-cur[cad])/400));
+        r.querySelector(".E").textContent=E.toFixed(3);
+        r.querySelector(".K").textContent=K;
+        let d=Math.round(K*(S-E));
+        r.querySelector(".delta").textContent=d;
+        cur[cad]+=d;
+        r.querySelector(".eloApres").textContent=cur[cad];
     });
+
+    newEloClassique.textContent=cur.classique;
+    newEloRapide.textContent=cur.rapide;
+    newEloBlitz.textContent=cur.blitz;
 }
 
 function resetTable(){
@@ -213,10 +230,17 @@ function resetTable(){
     kClassique.textContent="-";
     kRapide.textContent="-";
     kBlitz.textContent="-";
+    newEloClassique.textContent="-";
+    newEloRapide.textContent="-";
+    newEloBlitz.textContent="-";
 }
 
+eloClassique.addEventListener("input",calculate);
+eloRapide.addEventListener("input",calculate);
+eloBlitz.addEventListener("input",calculate);
+mineur.addEventListener("change",calculate);
+document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",calculate));
 </script>
 
 </body>
 </html>
-
