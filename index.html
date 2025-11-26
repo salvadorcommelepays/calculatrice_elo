@@ -19,6 +19,16 @@
     .elo-red { color:red; font-weight:bold; }
     button { padding:10px 15px; background:#1976d2; color:white; border:none; border-radius:6px; cursor:pointer; font-size:16px; margin-right:10px; }
     button:hover { background:#0f5cad; }
+    .flex-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.elo-box {
+    width: 48%;
+}
+
 </style>
 </head>
 
@@ -26,30 +36,34 @@
 <div class="container">
 
 <h1>Calculatrice Elo FIDE </h1>
+<div class="flex-row">
 
-<div class="section">
-    <div class="section">
-    <h3>Élos initiaux</h3>
-    <table>
-        <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
-        <tr>
-            <td><input type="number" id="eloClassique"></td>
-            <td><input type="number" id="eloRapide"></td>
-            <td><input type="number" id="eloBlitz"></td>
-        </tr>
-    </table>
+    <div class="section elo-box">
+        <h3>Élos initiaux</h3>
+        <table>
+            <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
+            <tr>
+                <td><input type="number" id="eloClassique"></td>
+                <td><input type="number" id="eloRapide"></td>
+                <td><input type="number" id="eloBlitz"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section elo-box">
+        <h3>Nouveaux Élos</h3>
+        <table>
+            <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
+            <tr>
+                <td id="newEloClassique">-</td>
+                <td id="newEloRapide">-</td>
+                <td id="newEloBlitz">-</td>
+            </tr>
+        </table>
+    </div>
+
 </div>
-<div class="section">
-    <h3>Nouveaux Élos</h3>
-    <table>
-        <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
-        <tr>
-            <td id="newEloClassique">-</td>
-            <td id="newEloRapide">-</td>
-            <td id="newEloBlitz">-</td>
-        </tr>
-    </table>
-</div>
+
 <h3>Options FIDE</h3>
 <div class="section">
     <label><input type="checkbox" id="mineur"> Je suis mineur</label>
@@ -228,6 +242,7 @@ function resetTable() {
 
 </body>
 </html>
+
 
 
 
