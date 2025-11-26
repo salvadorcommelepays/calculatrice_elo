@@ -167,27 +167,31 @@ function addRow() {
 }
 
 function calculate() {
-    let rows = document.querySelectorAll("#tableParties tbody tr");
-
     updateCounts();
 
-    let mineur = mineur.checked;
+    let mineurVal = mineur.checked;
     let list2400 = Array.from(document.querySelectorAll(".is2400:checked")).map(x => x.value);
 
-    let counts = {classique:0, rapide:0, blitz:0};
-    rows.forEach(r => counts[r.querySelector(".cadence").value]++);
+    let rows = document.querySelectorAll("#tableParties tbody tr");
+    let countCad = {classique:0, rapide:0, blitz:0};
 
-    let kC = computeK("classique", counts.classique, mineur, list2400);
-    let kR = computeK("rapide", counts.rapide, mineur, list2400);
-    let kB = computeK("blitz", counts.blitz, mineur, list2400);
+    rows.forEach(r => countCad[r.querySelector(".cadence").value]++);
+
+    let kC = computeK("classique", countCad.classique, mineurVal, list2400);
+    let kR = computeK("rapide", countCad.rapide, mineurVal, list2400);
+    let kB = computeK("blitz", countCad.blitz, mineurVal, list2400);
 
     kClassique.textContent = kC;
     kRapide.textContent = kR;
     kBlitz.textContent = kB;
 
-    let eC = parseInt(eloClassique.value) || 0;
-    let eR = parseInt(eloRapide.value) || 0;
-    let eB = parseInt(eloBlitz.value) || 0;
+    let base = {
+        classique: parseInt(eloClassique.value) || 0,
+        rapide: parseInt(eloRapide.value) || 0,
+        blitz: parseInt(eloBlitz.value) || 0
+    };
+
+    let cur = {...base};
 
     rows.forEach(r => {
         let adv = parseInt(r.querySelector(".eloAdv").value);
@@ -196,18 +200,22 @@ function calculate() {
         let S = parseFloat(r.querySelector(".resultat").value);
         let cad = r.querySelector(".cadence").value;
 
-        let cur = cad === "classique" ? eC : cad === "rapide" ? eR : eB;
         let K = cad === "classique" ? kC : cad === "rapide" ? kR : kB;
 
-        let E = 1 / (1 + Math.pow(10, (adv - cur) / 400));
+        let E = 1 / (1 + Math.pow(10, (adv - cur[cad]) / 400));
         r.querySelector(".E").textContent = E.toFixed(3);
 
         let d = Math.round(K * (S - E));
         r.querySelector(".delta").textContent = d;
 
-        let newElo = cur + d;
-        r.querySelector(".eloApres").textContent = newElo;
+        cur[cad] += d;
+        r.querySelector(".eloApres").textContent = cur[cad];
     });
+
+    newEloClassique.innerHTML = cur.classique > base.classique ? `<span class="elo-green">${cur.classique}</span>` : `<span class="elo-red">${cur.classique}</span>`;
+    newEloRapide.innerHTML    = cur.rapide > base.rapide ? `<span class="elo-green">${cur.rapide}</span>` : `<span class="elo-red">${cur.rapide}</span>`;
+    newEloBlitz.innerHTML     = cur.blitz > base.blitz ? `<span class="elo-green">${cur.blitz}</span>` : `<span class="elo-red">${cur.blitz}</span>`;
+});
 
     updateNewElos();
 }
@@ -226,3 +234,4 @@ function resetTable() {
 
 </body>
 </html>
+
