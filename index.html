@@ -12,16 +12,30 @@
     th { background:#1976d2; color:white; padding:10px; }
     td { padding:10px; border-bottom:1px solid #ddd; text-align:center; }
     tr:nth-child(even) { background:#f4f6f8; }
+
     .section { margin-bottom:25px; background:#f8fafc; padding:15px; border-radius:8px; }
+
     input[type="number"], select, input[type="text"] { width:100%; padding:8px; border-radius:6px; border:1px solid #ccc; }
-    label { font-weight:bold; display:block; margin-top:10px; }
+    label { font-weight:bold; display:block; margin-top:6px; } /* réduit ici */
+
     .elo-green { color:green; font-weight:bold; }
     .elo-red { color:red; font-weight:bold; }
+
     button { padding:10px 15px; background:#1976d2; color:white; border:none; border-radius:6px; cursor:pointer; font-size:16px; margin-right:10px; }
     button:hover { background:#0f5cad; }
+
     .flex-row { display:flex; justify-content:space-between; gap:20px; }
     .flex-row-2 { display:flex; justify-content:space-between; gap:25px; align-items:stretch; }
+
     .elo-box, .box-50 { width:48%; }
+
+    /* réduction du bloc option */
+    .options-box { 
+        background:#f8fafc; 
+        padding:10px 12px;      /* réduit */
+        border-radius:8px;
+    }
+
     .table-new-elo { border:3px solid red; border-radius:8px; }
 </style>
 </head>
@@ -58,17 +72,12 @@
 </div>
 
 <div class="flex-row-2">
-    <div class="section box-50">
+    <div class="options-box box-50">
         <h3>Options</h3>
         <label><input type="checkbox" id="mineur"> Je suis né en 2007 ou après</label>
         <label><input type="checkbox" class="is2400" value="classique"> Déjà 2400 en Classique</label>
         <label><input type="checkbox" class="is2400" value="rapide"> Déjà 2400 en Rapide</label>
         <label><input type="checkbox" class="is2400" value="blitz"> Déjà 2400 en Blitz</label>
-    </div>
-
-    <div class="section box-50" style="background:#fff7d6;border-left:4px solid #ffb300;">
-        <h3>Fonctionnement</h3>
-        Entrez vos élos puis ajoutez vos parties ci-dessous. Tout se calcule automatiquement.
     </div>
 </div>
 
@@ -123,7 +132,12 @@
 <script>
 let count=0;
 
-function computeK(c,n,m,list2400){if(list2400.includes(c))return 10;let b=m?40:20;if(n===0)return b;return Math.max(10,Math.min(b,Math.floor(700/n)));}
+function computeK(c,n,m,list2400){
+    if(list2400.includes(c))return 10;
+    let b=m?40:20;
+    if(n===0)return b;
+    return Math.max(10,Math.min(b,Math.floor(700/n)));
+}
 
 function updateCounts(){
     let rows=document.querySelectorAll("#tableParties tbody tr");
@@ -219,4 +233,3 @@ document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",ca
 
 </body>
 </html>
-
