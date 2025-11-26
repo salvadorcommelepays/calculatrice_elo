@@ -142,6 +142,14 @@
             <div class="coeff-card" id="kBlitzBox">K Blitz : -</div>
         </div>
     </div>
+<div class="section" style="margin-bottom:10px;">
+    <h3>Résumé des parties :</h3>
+    <div id="resumeCadences">
+        Classique : 0 partie(s) <br>
+        Rapide : 0 partie(s) <br>
+        Blitz : 0 partie(s)
+    </div>
+</div>
 
     <!-- TABLEAU DES PARTIES -->
     <table id="tableParties">
@@ -173,6 +181,22 @@
 let count = 0;
 
 // Ajouter une ligne
+    function updateCadenceSummary() {
+    let rows = document.querySelectorAll("#tableParties tbody tr");
+
+    let counts = { classique:0, rapide:0, blitz:0 };
+
+    rows.forEach(r => {
+        let cad = r.querySelector(".cadence").value;
+        counts[cad]++;
+    });
+
+    document.getElementById("resumeCadences").innerHTML = `
+        Classique : ${counts.classique} partie(s) <br>
+        Rapide : ${counts.rapide} partie(s) <br>
+        Blitz : ${counts.blitz} partie(s)
+    `;
+}
 function addRow() {
     count++;
     let tbody = document.querySelector("#tableParties tbody");
@@ -201,9 +225,12 @@ function addRow() {
         <td class="eloApres"></td>
     `;
     tbody.appendChild(tr);
+updateCadenceSummary();
+    // Mise à jour automatique si la cadence change dans une ligne
+tr.querySelector(".cadence").addEventListener("change", updateCadenceSummary);
 }
 
-// Fonction de calcul du K d'une cadence
+    // Fonction de calcul du K d'une cadence
 function computeK(cadence, nbCadence, isMineur, is2400List) {
 
     // 2400+ dans cette cadence → K=10
@@ -294,8 +321,11 @@ function resetTable() {
     document.querySelector("#tableParties tbody").innerHTML = "";
     count = 0;
     document.getElementById("resultFinal").innerHTML = "";
+    updateCadenceSummary(); // ← ajout
 }
+
 </script>
 
 </body>
 </html>
+
