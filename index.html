@@ -2,37 +2,82 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Calculateur Elo FIDE</title>
+<title>Calculatrice Elo FIDE</title>
 <style>
     body {
         font-family: Arial, sans-serif;
-        margin: 40px;
-        background: #f4f4f4;
+        background: #f3f3f3;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
     }
+
     .container {
         background: white;
-        padding: 20px;
+        padding: 25px;
         width: 350px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px #ccc;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
-    input, select, button {
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+    }
+
+    input, select {
         width: 100%;
         padding: 10px;
-        margin: 10px 0;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #0077ff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    button:hover {
+        background: #005fcc;
+    }
+
+    #resultatElo {
+        text-align: center;
+        font-size: 20px;
+        margin-top: 20px;
+        font-weight: bold;
+        color: #333;
     }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Calculateur Elo FIDE</h2>
+    <h2>Calculatrice Elo FIDE</h2>
 
     <label>Elo actuel :</label>
-    <input type="number" id="eloJoueur">
+    <input type="number" id="eloJoueur" placeholder="Ex : 1500">
 
     <label>Elo adversaire :</label>
-    <input type="number" id="eloAdv">
+    <input type="number" id="eloAdv" placeholder="Ex : 1600">
 
     <label>Résultat :</label>
     <select id="resultat">
@@ -48,19 +93,16 @@
         <option value="blitz">Blitz</option>
     </select>
 
-    <label>Nombre de parties jouées ce mois :</label>
-    <input type="number" id="nbParties">
-
     <label>Coefficient K :</label>
     <select id="k">
-        <option value="40">K = 40 (nouveaux joueurs)</option>
-        <option value="20">K = 20 (&lt; 2400)</option>
-        <option value="10">K = 10 (≥ 2400)</option>
+        <option value="40">K = 40 (débutant &lt;30 parties)</option>
+        <option value="20">K = 20 (joueurs &lt;2400)</option>
+        <option value="10">K = 10 (joueurs ≥2400)</option>
     </select>
 
     <button onclick="calculer()">Calculer</button>
 
-    <h3 id="resultatElo"></h3>
+    <div id="resultatElo"></div>
 </div>
 
 <script>
@@ -70,19 +112,21 @@ function calculer() {
     let S = parseFloat(document.getElementById("resultat").value);
     let K = parseInt(document.getElementById("k").value);
 
+    if (isNaN(eloJoueur) || isNaN(eloAdv)) {
+        document.getElementById("resultatElo").innerText = "⚠️ Entrez des valeurs valides.";
+        return;
+    }
+
     // Score attendu
     let E = 1 / (1 + Math.pow(10, (eloAdv - eloJoueur) / 400));
 
     // Nouveau Elo
     let newElo = Math.round(eloJoueur + K * (S - E));
 
-    document.getElementById("resultatElo").innerText =
-        "Nouveau Elo : " + newElo;
+    document.getElementById("resultatElo").innerHTML =
+        "🧮 Nouveau Elo : <strong>" + newElo + "</strong>";
 }
 </script>
 
 </body>
 </html>
-
-
-
