@@ -45,7 +45,7 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo v26.11.2025 18:16</h1>
+<h1>Calculatrice Elo v26.11.2025 18:25</h1>
 
 <!-- ========= LIGNE 1 — Élos initiaux + Nouveaux Élos ========= -->
 <div class="row">
@@ -211,8 +211,7 @@ function calculate(){
     let K = cad === "classique" ? kC : cad === "rapide" ? kR : kB;
 
    let Eraw = 1/(1+Math.pow(10,(adv-base[cad])/400));
-    let E = Number(Eraw.toFixed(2));  
-
+let E = Math.floor(Eraw * 100) / 100; // arrondi vers le bas
     r.querySelector(".E").textContent = E.toFixed(2);
     r.querySelector(".K").textContent = K;
 
@@ -256,6 +255,7 @@ document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",ca
 
 </body>
 </html>
+
 
 
 
