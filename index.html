@@ -45,7 +45,7 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo v26.11.2025 18:06</h1>
+<h1>Calculatrice Elo v26.11.2025 18:07</h1>
 
 <!-- ========= LIGNE 1 — Élos initiaux + Nouveaux Élos ========= -->
 <div class="row">
@@ -217,9 +217,9 @@ function calculate(){
         r.querySelector(".eloApres").textContent=Math.round(cur[cad]);
     });
 
-    newEloClassique.textContent=cur.classique;
-    newEloRapide.textContent=cur.rapide;
-    newEloBlitz.textContent=cur.blitz;
+    newEloClassique.textContent = Math.round(cur.classique);
+newEloRapide.textContent = Math.round(cur.rapide);
+newEloBlitz.textContent = Math.round(cur.blitz)
 }
 
 function resetTable(){
@@ -245,6 +245,7 @@ document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",ca
 
 </body>
 </html>
+
 
 
 
