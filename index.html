@@ -45,7 +45,7 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo v26.11.2025 17:50</h1>
+<h1>Calculatrice Elo v26.11.2025 17:55</h1>
 
 <!-- ========= LIGNE 1 — Élos initiaux + Nouveaux Élos ========= -->
 <div class="row">
@@ -97,7 +97,6 @@
                     <th>Elo Adv</th>
                     <th>Résultat</th>
                     <th>Cadence</th>
-                    <th>Note</th>
                     <th>E</th>
                     <th>K</th>
                     <th>Δ</th>
@@ -213,7 +212,7 @@ function calculate(){
         let E=1/(1+Math.pow(10,(adv-cur[cad])/400));
         r.querySelector(".E").textContent=E.toFixed(3);
         r.querySelector(".K").textContent=K;
-        let d=Math.round(K*(S-E));
+       let d = K * (S - E);
         r.querySelector(".delta").textContent=d;
         cur[cad]+=d;
         r.querySelector(".eloApres").textContent=cur[cad];
@@ -247,6 +246,7 @@ document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",ca
 
 </body>
 </html>
+
 
 
 
