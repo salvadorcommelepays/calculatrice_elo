@@ -2,129 +2,246 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Calculatrice Elo FIDE</title>
+<title>Calculatrice Elo FIDE Avancée</title>
 <style>
     body {
         font-family: Arial, sans-serif;
-        background: #f3f3f3;
+        background: #eef2f7;
         margin: 0;
         padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
     }
 
     .container {
+        max-width: 1100px;
+        margin: 40px auto;
         background: white;
         padding: 25px;
-        width: 350px;
         border-radius: 12px;
         box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
 
-    h2 {
+    h1 {
         text-align: center;
+        color: #333;
+        margin-bottom: 25px;
+    }
+
+    .section {
         margin-bottom: 20px;
+        padding: 15px;
+        background: #f8fafc;
+        border-radius: 8px;
     }
 
     label {
         font-weight: bold;
-        margin-top: 10px;
         display: block;
+        margin-top: 8px;
     }
 
-    input, select {
+    input[type="number"], select, input[type="text"] {
         width: 100%;
-        padding: 10px;
+        padding: 8px;
         margin-top: 5px;
         border-radius: 6px;
         border: 1px solid #ccc;
         font-size: 15px;
     }
 
+    input[type="checkbox"] {
+        margin-right: 8px;
+    }
+
     button {
-        width: 100%;
-        padding: 12px;
-        background: #0077ff;
+        padding: 10px 15px;
+        background: #1976d2;
         color: white;
         border: none;
         border-radius: 6px;
-        font-size: 16px;
         cursor: pointer;
-        margin-top: 15px;
+        font-size: 15px;
+        margin-right: 10px;
     }
 
     button:hover {
-        background: #005fcc;
+        background: #0f5cad;
     }
 
-    #resultatElo {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th {
+        background: #1976d2;
+        color: white;
+        padding: 10px;
         text-align: center;
-        font-size: 20px;
+    }
+
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background: #f4f6f8;
+    }
+
+    .result-box {
         margin-top: 20px;
-        font-weight: bold;
-        color: #333;
+        padding: 15px;
+        background: #e7f3ff;
+        border-left: 4px solid #1976d2;
+        border-radius: 6px;
+        font-size: 18px;
     }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Calculatrice Elo FIDE</h2>
+    <h1>Calculatrice Elo FIDE Avancée</h1>
 
-    <label>Elo actuel :</label>
-    <input type="number" id="eloJoueur" placeholder="Ex : 1500">
+    <!-- SECTION OPTIONS -->
+    <div class="section">
+        <label>Elo actuel :</label>
+        <input type="number" id="eloInitial" placeholder="Ex : 1500">
 
-    <label>Elo adversaire :</label>
-    <input type="number" id="eloAdv" placeholder="Ex : 1600">
+        <label><input type="checkbox" id="is2400"> J'ai déjà été 2400+</label>
 
-    <label>Résultat :</label>
-    <select id="resultat">
-        <option value="1">Victoire</option>
-        <option value="0.5">Nul</option>
-        <option value="0">Défaite</option>
-    </select>
+        <div id="cadence2400" style="display:none;">
+            <label>Cadence :</label>
+            <select id="cadence2400Select">
+                <option value="classique">Classique</option>
+                <option value="rapide">Rapide</option>
+                <option value="blitz">Blitz</option>
+            </select>
+        </div>
 
-    <label>Cadence :</label>
-    <select id="cadence">
-        <option value="classique">Classique</option>
-        <option value="rapide">Rapide</option>
-        <option value="blitz">Blitz</option>
-    </select>
+        <label><input type="checkbox" id="isMineur"> Je suis mineur</label>
 
-    <label>Coefficient K :</label>
-    <select id="k">
-        <option value="40">K = 40 (débutant &lt;30 parties)</option>
-        <option value="20">K = 20 (joueurs &lt;2400)</option>
-        <option value="10">K = 10 (joueurs ≥2400)</option>
-    </select>
+        <label>Nombre de parties déjà jouées ce mois :</label>
+        <input type="number" id="partiesMois" value="0">
+    </div>
 
-    <button onclick="calculer()">Calculer</button>
+    <!-- TABLEAU -->
+    <table id="tableParties">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Elo Adv</th>
+                <th>Résultat</th>
+                <th>Cadence</th>
+                <th>Note</th>
+                <th>E (proba)</th>
+                <th>K</th>
+                <th>Δ Elo</th>
+                <th>Elo après</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
-    <div id="resultatElo"></div>
+    <button onclick="ajouterLigne()">Ajouter une partie</button>
+    <button onclick="calculer()">Recalculer tout</button>
+    <button onclick="resetTable()">Réinitialiser</button>
+
+    <div class="result-box" id="resultFinal"></div>
 </div>
 
 <script>
-function calculer() {
-    let eloJoueur = parseInt(document.getElementById("eloJoueur").value);
-    let eloAdv = parseInt(document.getElementById("eloAdv").value);
-    let S = parseFloat(document.getElementById("resultat").value);
-    let K = parseInt(document.getElementById("k").value);
+let compteur = 0;
 
-    if (isNaN(eloJoueur) || isNaN(eloAdv)) {
-        document.getElementById("resultatElo").innerText = "⚠️ Entrez des valeurs valides.";
-        return;
+function ajouterLigne() {
+    compteur++;
+    let tbody = document.querySelector("#tableParties tbody");
+    let tr = document.createElement("tr");
+    tr.innerHTML = `
+        <td>${compteur}</td>
+        <td><input type="number" class="eloAdv"></td>
+        <td>
+            <select class="resultat">
+                <option value="1">Victoire</option>
+                <option value="0.5">Nul</option>
+                <option value="0">Défaite</option>
+            </select>
+        </td>
+        <td>
+            <select class="cadence">
+                <option value="classique">Classique</option>
+                <option value="rapide">Rapide</option>
+                <option value="blitz">Blitz</option>
+            </select>
+        </td>
+        <td><input type="text" class="note"></td>
+        <td class="E"></td>
+        <td class="K"></td>
+        <td class="delta"></td>
+        <td class="eloApres"></td>
+    `;
+    tbody.appendChild(tr);
+}
+
+// logique K dynamique
+function calculerK(is2400, isMineur, partieIndex, totalPartiesMois) {
+    if (is2400) return 10;
+    if (isMineur) {
+        // K dégressif mineur -> cap 700
+        return Math.max(10, 40 - (partieIndex * 1));
     }
+    // cas général : K=20 puis dégressif après 35 parties
+    if (partieIndex <= 35) return 20;
+    return Math.max(10, 20 - (partieIndex - 35));
+}
 
-    // Score attendu
-    let E = 1 / (1 + Math.pow(10, (eloAdv - eloJoueur) / 400));
+function calculer() {
+    let elo = parseInt(document.getElementById("eloInitial").value);
+    let is2400 = document.getElementById("is2400").checked;
+    let isMineur = document.getElementById("isMineur").checked;
+    let partiesMois = parseInt(document.getElementById("partiesMois").value);
 
-    // Nouveau Elo
-    let newElo = Math.round(eloJoueur + K * (S - E));
+    let lignes = document.querySelectorAll("#tableParties tbody tr");
+    let totalDelta = 0;
 
-    document.getElementById("resultatElo").innerHTML =
-        "🧮 Nouveau Elo : <strong>" + newElo + "</strong>";
+    lignes.forEach((tr, index) => {
+        let eloAdv = parseInt(tr.querySelector(".eloAdv").value);
+        let S = parseFloat(tr.querySelector(".resultat").value);
+
+        // Score attendu E
+        let E = 1 / (1 + Math.pow(10, (eloAdv - elo) / 400));
+        tr.querySelector(".E").innerText = E.toFixed(3);
+
+        // Coefficient K
+        let K = calculerK(is2400, isMineur, index + partiesMois + 1, partiesMois);
+        tr.querySelector(".K").innerText = K;
+
+        // Δ Elo
+        let delta = Math.round(K * (S - E));
+        tr.querySelector(".delta").innerText = delta;
+
+        // Elo après
+        elo += delta;
+        tr.querySelector(".eloApres").innerText = elo;
+
+        totalDelta += delta;
+    });
+
+    document.getElementById("resultFinal").innerHTML =
+        `<b>Elo final :</b> ${elo} <br> <b>Total Δ Elo :</b> ${totalDelta}`;
+}
+
+document.getElementById("is2400").addEventListener("change", function() {
+    document.getElementById("cadence2400").style.display =
+        this.checked ? "block" : "none";
+});
+
+function resetTable() {
+    document.querySelector("#tableParties tbody").innerHTML = "";
+    compteur = 0;
+    document.getElementById("resultFinal").innerHTML = "";
 }
 </script>
 
