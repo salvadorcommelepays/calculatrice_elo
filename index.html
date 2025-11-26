@@ -5,225 +5,151 @@
 <title>Calculatrice Elo FIDE</title>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background:#eef2f7;
-        margin:0;
-    }
-
-    .container {
-        max-width:1200px;
-        margin:40px auto;
-        background:white;
-        padding:30px;
-        border-radius:12px;
-        box-shadow:0 0 20px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-        text-align:center;
-        margin-bottom:25px;
-        color:#333;
-        font-size:32px;
-    }
-
-    .section {
-        padding:15px;
-        background:#f8fafc;
-        border-radius:8px;
-        margin-bottom:20px;
-    }
-
-    label {
-        display:block;
-        margin-top:10px;
-        font-weight:bold;
-    }
-
-    input[type="checkbox"] { margin-right:8px; }
-
-    input[type="number"], input[type="text"], select {
-        width:100%;
-        padding:8px;
-        border-radius:6px;
-        border:1px solid #ccc;
-        margin-top:5px;
-        font-size:16px;
-    }
-
-    .coeff-box {
-        display:flex;
-        gap:15px;
-        margin-top:15px;
-    }
-
-    .coeff-card {
-        flex:1;
-        background:#e7f3ff;
-        padding:15px;
-        border-left:5px solid #1976d2;
-        border-radius:8px;
-        text-align:center;
-        font-size:18px;
-    }
-
-    table {
-        width:100%;
-        margin-top:20px;
-        border-collapse:collapse;
-    }
-
-    th {
-        background:#1976d2;
-        color:white;
-        padding:10px;
-    }
-
-    td {
-        padding:10px;
-        border-bottom:1px solid #ddd;
-        text-align:center;
-    }
-
+    body { font-family: Arial, sans-serif; background:#eef2f7; margin:0; }
+    .container { max-width:1200px; margin:40px auto; background:white; padding:30px; border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.1); }
+    h1 { text-align:center; margin-bottom:25px; color:#333; font-size:32px; }
+    table { width:100%; border-collapse:collapse; margin-bottom:20px; }
+    th { background:#1976d2; color:white; padding:10px; }
+    td { padding:10px; border-bottom:1px solid #ddd; text-align:center; }
     tr:nth-child(even) { background:#f4f6f8; }
-
-    button {
-        padding:10px 15px;
-        background:#1976d2;
-        color:white;
-        border:none;
-        border-radius:6px;
-        cursor:pointer;
-        font-size:16px;
-        margin-right:10px;
-    }
-
-    button:hover { background:#0f5cad; }
-
-    .result-box {
-        margin-top:20px;
-        padding:15px;
-        background:#e7f3ff;
-        border-left:5px solid #1976d2;
-        border-radius:8px;
-        font-size:20px;
-    }
-
+    .section { margin-bottom:25px; background:#f8fafc; padding:15px; border-radius:8px; }
+    input[type="number"], select, input[type="text"] { width:100%; padding:8px; border-radius:6px; border:1px solid #ccc; }
+    label { font-weight:bold; display:block; margin-top:10px; }
     .elo-green { color:green; font-weight:bold; }
     .elo-red { color:red; font-weight:bold; }
+    button { padding:10px 15px; background:#1976d2; color:white; border:none; border-radius:6px; cursor:pointer; font-size:16px; margin-right:10px; }
+    button:hover { background:#0f5cad; }
 </style>
 </head>
 
 <body>
 <div class="container">
 
-    <h1>Calculatrice Elo FIDE Avancée</h1>
+<h1>Calculatrice Elo FIDE Avancée</h1>
 
-    <!-- 📌 ÉLO PAR CADENCE -->
-    <div class="section">
-        <h3>Élo par cadence</h3>
-        <div id="eloCadencesDisplay">
-            Classique : - <br>
-            Rapide : - <br>
-            Blitz : -
-        </div>
-    </div>
-
-    <!-- OPTIONS DU JOUEUR -->
-    <div class="section">
-        <label>Elo actuel :</label>
-        <input type="number" id="eloInitial">
-
-        <label><input type="checkbox" id="mineur"> Je suis mineur</label>
-
-        <label>J'ai déjà été 2400+ dans :</label>
-        <label><input type="checkbox" class="is2400" value="classique"> Classique</label>
-        <label><input type="checkbox" class="is2400" value="rapide"> Rapide</label>
-        <label><input type="checkbox" class="is2400" value="blitz"> Blitz</label>
-
-        <div class="coeff-box">
-            <div class="coeff-card" id="kClassiqueBox">K Classique : -</div>
-            <div class="coeff-card" id="kRapideBox">K Rapide : -</div>
-            <div class="coeff-card" id="kBlitzBox">K Blitz : -</div>
-        </div>
-    </div>
-
-    <!-- RÉSUMÉ DES PARTIES -->
-    <div class="section">
-        <h3>Résumé des parties :</h3>
-        <div id="resumeCadences">
-            Classique : 0 partie(s) <br>
-            Rapide : 0 partie(s) <br>
-            Blitz : 0 partie(s)
-        </div>
-    </div>
-
-    <!-- TABLEAU DES PARTIES -->
-    <table id="tableParties">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Elo Adv</th>
-                <th>Résultat</th>
-                <th>Cadence</th>
-                <th>Note</th>
-                <th>E (proba)</th>
-                <th>K</th>
-                <th>Δ Elo</th>
-                <th>Elo après</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
+<div class="section">
+    <h3>Élos initiaux</h3>
+    <table>
+        <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
+        <tr>
+            <td><input type="number" id="eloClassique"></td>
+            <td><input type="number" id="eloRapide"></td>
+            <td><input type="number" id="eloBlitz"></td>
+        </tr>
     </table>
+</div>
 
-    <button onclick="addRow()">Ajouter une partie</button>
-    <button onclick="calculate()">Recalculer</button>
-    <button onclick="resetTable()">Réinitialiser</button>
+<div class="section">
+    <h3>Nouveaux Élos</h3>
+    <table>
+        <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
+        <tr>
+            <td id="newEloClassique">-</td>
+            <td id="newEloRapide">-</td>
+            <td id="newEloBlitz">-</td>
+        </tr>
+    </table>
+</div>
 
-    <div class="result-box" id="resultFinal"></div>
+<div class="section">
+    <h3>Nombre de parties</h3>
+    <table>
+        <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
+        <tr>
+            <td id="nbClassique">0</td>
+            <td id="nbRapide">0</td>
+            <td id="nbBlitz">0</td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <h3>Coefficients K</h3>
+    <label><input type="checkbox" id="mineur"> Je suis mineur</label>
+    <label><input type="checkbox" class="is2400" value="classique"> Classique 2400+</label>
+    <label><input type="checkbox" class="is2400" value="rapide"> Rapide 2400+</label>
+    <label><input type="checkbox" class="is2400" value="blitz"> Blitz 2400+</label>
+
+    <table>
+        <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
+        <tr>
+            <td id="kClassique">-</td>
+            <td id="kRapide">-</td>
+            <td id="kBlitz">-</td>
+        </tr>
+    </table>
+</div>
+
+<h3>Parties</h3>
+
+<table id="tableParties">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Elo Adv</th>
+            <th>Résultat</th>
+            <th>Cadence</th>
+            <th>Note</th>
+            <th>E (proba)</th>
+            <th>K</th>
+            <th>Δ Elo</th>
+            <th>Elo après</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<button onclick="addRow()">Ajouter une partie</button>
+<button onclick="calculate()">Recalculer</button>
+<button onclick="resetTable()">Réinitialiser</button>
 
 </div>
 
 <script>
 let count = 0;
 
-// 🔢 Mise à jour du résumé des cadences
-function updateCadenceSummary() {
-    let rows = document.querySelectorAll("#tableParties tbody tr");
-    let counts = { classique:0, rapide:0, blitz:0 };
-    rows.forEach(r => counts[r.querySelector(".cadence").value]++);
-    document.getElementById("resumeCadences").innerHTML =
-        `Classique : ${counts.classique} partie(s) <br>
-         Rapide : ${counts.rapide} partie(s) <br>
-         Blitz : ${counts.blitz} partie(s)`;
+function computeK(cadence, n, mineur, list2400) {
+    if (list2400.includes(cadence)) return 10;
+    let base = mineur ? 40 : 20;
+    if (n === 0) return base;
+    return Math.max(10, Math.min(base, Math.floor(700 / n)));
 }
 
-// 🔢 Mise à jour des Élos par cadence
-function updateEloCadences() {
-    let eloInitial = parseInt(document.getElementById("eloInitial").value);
-    if (isNaN(eloInitial)) return;
+function updateCounts() {
+    let rows = document.querySelectorAll("#tableParties tbody tr");
+    let c = {classique:0, rapide:0, blitz:0};
+    rows.forEach(r => c[r.querySelector(".cadence").value]++);
+    nbClassique.textContent = c.classique;
+    nbRapide.textContent = c.rapide;
+    nbBlitz.textContent = c.blitz;
+}
+
+function updateNewElos() {
+    let eC = parseInt(eloClassique.value) || 0;
+    let eR = parseInt(eloRapide.value) || 0;
+    let eB = parseInt(eloBlitz.value) || 0;
 
     let rows = document.querySelectorAll("#tableParties tbody tr");
-    let total = { classique:0, rapide:0, blitz:0 };
+    let delta = {classique:0, rapide:0, blitz:0};
 
     rows.forEach(r => {
         let cad = r.querySelector(".cadence").value;
-        let delta = parseInt(r.querySelector(".delta").innerText);
-        if (!isNaN(delta)) total[cad] += delta;
+        let d = parseInt(r.querySelector(".delta").textContent);
+        if (!isNaN(d)) delta[cad] += d;
     });
 
-    document.getElementById("eloCadencesDisplay").innerHTML =
-        `Classique : ${eloInitial + total.classique} <br>
-         Rapide : ${eloInitial + total.rapide} <br>
-         Blitz : ${eloInitial + total.blitz}`;
+    let fC = eC + delta.classique;
+    let fR = eR + delta.rapide;
+    let fB = eB + delta.blitz;
+
+    newEloClassique.innerHTML = fC > eC ? `<span class='elo-green'>${fC}</span>` : `<span class='elo-red'>${fC}</span>`;
+    newEloRapide.innerHTML    = fR > eR ? `<span class='elo-green'>${fR}</span>` : `<span class='elo-red'>${fR}</span>`;
+    newEloBlitz.innerHTML     = fB > eB ? `<span class='elo-green'>${fB}</span>` : `<span class='elo-red'>${fB}</span>`;
 }
 
-// ➕ Ajouter une ligne
 function addRow() {
     count++;
-    let tbody = document.querySelector("#tableParties tbody");
     let tr = document.createElement("tr");
-
     tr.innerHTML = `
         <td>${count}</td>
         <td><input type="number" class="eloAdv"></td>
@@ -235,91 +161,66 @@ function addRow() {
         <td class="delta"></td>
         <td class="eloApres"></td>
     `;
-
-    tbody.appendChild(tr);
-
-    tr.querySelector(".cadence").addEventListener("change", () => {
-        updateCadenceSummary();
-        updateEloCadences();
-    });
-
-    updateCadenceSummary();
-    updateEloCadences();
+    tableParties.querySelector("tbody").appendChild(tr);
+    tr.querySelector(".cadence").addEventListener("change", () => { calculate(); });
+    calculate();
 }
 
-// 📘 Fonction K FIDE
-function computeK(cadence, nbCadence, isMineur, is2400List) {
-    if (is2400List.includes(cadence)) return 10;
-    let baseK = isMineur ? 40 : 20;
-    if (nbCadence === 0) return baseK;
-    let kEff = Math.floor(700 / nbCadence);
-    return Math.max(10, Math.min(baseK, kEff));
-}
-
-// 🧮 Recalculer
 function calculate() {
-    let eloInitial = parseInt(document.getElementById("eloInitial").value);
-    let elo = eloInitial;
-
-    if (isNaN(elo)) return alert("Entrez un Elo initial.");
-
-    let isMineur = document.getElementById("mineur").checked;
-    let is2400List = Array.from(document.querySelectorAll(".is2400:checked")).map(c => c.value);
-
     let rows = document.querySelectorAll("#tableParties tbody tr");
-    let countCad = { classique:0, rapide:0, blitz:0 };
 
-    rows.forEach(r => countCad[r.querySelector(".cadence").value]++);
+    updateCounts();
 
-    let Kclassique = computeK("classique", countCad.classique, isMineur, is2400List);
-    let Krapide    = computeK("rapide", countCad.rapide, isMineur, is2400List);
-    let Kblitz     = computeK("blitz", countCad.blitz, isMineur, is2400List);
+    let mineur = mineur.checked;
+    let list2400 = Array.from(document.querySelectorAll(".is2400:checked")).map(x => x.value);
 
-    document.getElementById("kClassiqueBox").innerText = "K Classique : " + Kclassique;
-    document.getElementById("kRapideBox").innerText    = "K Rapide : " + Krapide;
-    document.getElementById("kBlitzBox").innerText     = "K Blitz : " + Kblitz;
+    let counts = {classique:0, rapide:0, blitz:0};
+    rows.forEach(r => counts[r.querySelector(".cadence").value]++);
 
-    let totalDelta = 0;
+    let kC = computeK("classique", counts.classique, mineur, list2400);
+    let kR = computeK("rapide", counts.rapide, mineur, list2400);
+    let kB = computeK("blitz", counts.blitz, mineur, list2400);
 
-    rows.forEach(tr => {
-        let adv = parseInt(tr.querySelector(".eloAdv").value);
+    kClassique.textContent = kC;
+    kRapide.textContent = kR;
+    kBlitz.textContent = kB;
+
+    let eC = parseInt(eloClassique.value) || 0;
+    let eR = parseInt(eloRapide.value) || 0;
+    let eB = parseInt(eloBlitz.value) || 0;
+
+    rows.forEach(r => {
+        let adv = parseInt(r.querySelector(".eloAdv").value);
         if (isNaN(adv)) return;
 
-        let S = parseFloat(tr.querySelector(".resultat").value);
-        let cad = tr.querySelector(".cadence").value;
+        let S = parseFloat(r.querySelector(".resultat").value);
+        let cad = r.querySelector(".cadence").value;
 
-        let E = 1 / (1 + Math.pow(10, (adv - elo) / 400));
-        tr.querySelector(".E").innerText = E.toFixed(3);
+        let cur = cad === "classique" ? eC : cad === "rapide" ? eR : eB;
+        let K = cad === "classique" ? kC : cad === "rapide" ? kR : kB;
 
-        let K = (cad === "classique" ? Kclassique : cad === "rapide" ? Krapide : Kblitz);
-        tr.querySelector(".K").innerText = K;
+        let E = 1 / (1 + Math.pow(10, (adv - cur) / 400));
+        r.querySelector(".E").textContent = E.toFixed(3);
 
-        let delta = Math.round(K * (S - E));
-        tr.querySelector(".delta").innerText = delta;
+        let d = Math.round(K * (S - E));
+        r.querySelector(".delta").textContent = d;
 
-        elo += delta;
-        tr.querySelector(".eloApres").innerText = elo;
-
-        totalDelta += delta;
+        let newElo = cur + d;
+        r.querySelector(".eloApres").textContent = newElo;
     });
 
-    // 🔥 résultat final avec couleur
-    let colorClass = elo > eloInitial ? "elo-green" : "elo-red";
-
-    document.getElementById("resultFinal").innerHTML =
-        `<b>Elo final :</b> <span class="${colorClass}">${elo}</span><br>
-         <b>Total Δ Elo :</b> ${totalDelta}`;
-
-    updateEloCadences();
+    updateNewElos();
 }
 
-// 🔁 Réinitialiser
 function resetTable() {
-    document.querySelector("#tableParties tbody").innerHTML = "";
+    tableParties.querySelector("tbody").innerHTML = "";
     count = 0;
-    document.getElementById("resultFinal").innerHTML = "";
-    updateCadenceSummary();
-    updateEloCadences();
+    nbClassique.textContent = 0;
+    nbRapide.textContent = 0;
+    nbBlitz.textContent = 0;
+    newEloClassique.textContent = "-";
+    newEloRapide.textContent = "-";
+    newEloBlitz.textContent = "-";
 }
 </script>
 
