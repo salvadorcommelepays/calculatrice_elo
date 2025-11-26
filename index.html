@@ -28,7 +28,16 @@
 .elo-box {
     width: 48%;
 }
+.flex-row-2 {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+    align-items: stretch;
+}
 
+.box-50 {
+    width: 48%;
+}
 </style>
 </head>
 
@@ -62,22 +71,29 @@
         </table>
     </div>
 
+<div class="flex-row-2">
+
+    <!-- OPTIONS FIDE -->
+    <div class="section box-50">
+        <h3>Options FIDE</h3>
+
+        <label><input type="checkbox" id="mineur"> Je suis mineur</label>
+        <label><input type="checkbox" class="is2400" value="classique"> Classique 2400+</label>
+        <label><input type="checkbox" class="is2400" value="rapide"> Rapide 2400+</label>
+        <label><input type="checkbox" class="is2400" value="blitz"> Blitz 2400+</label>
+    </div>
+
+    <!-- FONCTIONNEMENT -->
+    <div class="section box-50" style="background:#fff7d6;border-left:4px solid #ffb300;">
+        <h3>Fonctionnement</h3>
+        <p style="margin:0;font-size:15px;">
+            Veuillez entrer vos elos actuels et descendre plus bas pour remplir les parties du mois voulu.<br><br>
+            Attention : en cas de tournois joués à la fin du mois précédent, il se peut qu'un elo différent soit utilisé pour ces tournois précis. Nous vous recommandons de les calculer à part.
+        </p>
+    </div>
+
 </div>
 
-<h3>Options FIDE</h3>
-<div class="section">
-    <label><input type="checkbox" id="mineur"> Je suis mineur</label>
-    <label><input type="checkbox" class="is2400" value="classique"> Classique 2400+</label>
-    <label><input type="checkbox" class="is2400" value="rapide"> Rapide 2400+</label>
-    <label><input type="checkbox" class="is2400" value="blitz"> Blitz 2400+</label>
-</div>
-  <h3>Fonctionnement</h3>
-<div class="section" style="background:#fff7d6;border-left:4px solid #ffb300;">
-    <p style="margin:0;font-size:15px;">
-        Veuillez entrer vos elos actuels et descendre plus bas pour remplir les parties du mois voulu.<br><br>
-        Attention : en cas de tournois joués à la fin du mois précédent, il se peut qu'un elo différent soit utilisé pour ces tournois précis. Nous vous recommandons de les calculer à part.
-    </p>
-</div>
 
 <h3>Nombre de parties</h3>
 <div class="section">
@@ -242,6 +258,7 @@ function resetTable() {
 
 </body>
 </html>
+
 
 
 
