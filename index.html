@@ -16,7 +16,7 @@
     .section { margin-bottom:25px; background:#f8fafc; padding:15px; border-radius:8px; }
 
     input[type="number"], select, input[type="text"] { width:100%; padding:8px; border-radius:6px; border:1px solid #ccc; }
-    label { font-weight:bold; display:block; margin-top:6px; } /* réduit ici */
+    label { font-weight:bold; display:block; margin-top:6px; }
 
     .elo-green { color:green; font-weight:bold; }
     .elo-red { color:red; font-weight:bold; }
@@ -26,13 +26,13 @@
 
     .flex-row { display:flex; justify-content:space-between; gap:20px; }
     .flex-row-2 { display:flex; justify-content:space-between; gap:25px; align-items:stretch; }
+    .flex-column { display:flex; flex-direction:column; gap:25px; }
 
     .elo-box, .box-50 { width:48%; }
 
-    /* réduction du bloc option */
     .options-box { 
         background:#f8fafc; 
-        padding:10px 12px;      /* réduit */
+        padding:10px 12px;
         border-radius:8px;
     }
 
@@ -79,6 +79,7 @@
         <label><input type="checkbox" class="is2400" value="rapide"> Déjà 2400 en Rapide</label>
         <label><input type="checkbox" class="is2400" value="blitz"> Déjà 2400 en Blitz</label>
     </div>
+
 <h3>Parties du mois</h3>
 
 <table id="tableParties">
@@ -100,8 +101,9 @@
 
 <button onclick="addRow()">Ajouter une partie</button>
 <button onclick="resetTable()">Réinitialiser</button>
-<div>
-<div class="flex-row-2">
+
+<div class="flex-column">
+
     <div class="section box-50">
         <h3>Nombre de parties</h3>
         <table>
@@ -125,6 +127,7 @@
             </tr>
         </table>
     </div>
+
 </div>
 
 <script>
@@ -231,7 +234,3 @@ document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",ca
 
 </body>
 </html>
-
-
-
-
