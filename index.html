@@ -6,35 +6,56 @@
 
 <style>
     body { font-family: Arial, sans-serif; background:#eef2f7; margin:0; }
-    .container { max-width:1200px; margin:40px auto; background:white; padding:30px; border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.1); }
+    .container { 
+        max-width:1200px; 
+        margin:40px auto; 
+        background:white; 
+        padding:30px; 
+        border-radius:12px; 
+        box-shadow:0 0 20px rgba(0,0,0,0.1); 
+    }
+
     h1 { text-align:center; margin-bottom:25px; color:#333; font-size:32px; }
+
     table { width:100%; border-collapse:collapse; margin-bottom:20px; }
     th { background:#1976d2; color:white; padding:10px; }
     td { padding:10px; border-bottom:1px solid #ddd; text-align:center; }
     tr:nth-child(even) { background:#f4f6f8; }
 
-    .section { margin-bottom:25px; background:#f8fafc; padding:15px; border-radius:8px; }
+    .section { background:#f8fafc; padding:15px; border-radius:8px; }
 
-    input[type="number"], select, input[type="text"] { width:100%; padding:8px; border-radius:6px; border:1px solid #ccc; }
+    input[type="number"], select, input[type="text"] {
+        width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;
+    }
+
     label { font-weight:bold; display:block; margin-top:6px; }
 
-    .elo-green { color:green; font-weight:bold; }
-    .elo-red { color:red; font-weight:bold; }
-
-    button { padding:10px 15px; background:#1976d2; color:white; border:none; border-radius:6px; cursor:pointer; font-size:16px; margin-right:10px; }
+    button {
+        width:100%;
+        padding:15px;
+        background:#1976d2;
+        color:white;
+        border:none;
+        border-radius:8px;
+        cursor:pointer;
+        font-size:16px;
+        margin-bottom:15px;
+    }
     button:hover { background:#0f5cad; }
 
-    .flex-row { display:flex; justify-content:space-between; gap:20px; }
-    .flex-row-2 { display:flex; justify-content:space-between; gap:25px; align-items:stretch; }
-    .flex-column { display:flex; flex-direction:column; gap:25px; }
+    /* --- Layout --- */
 
-    .elo-box, .box-50 { width:48%; }
-
-    .options-box { 
-        background:#f8fafc; 
-        padding:10px 12px;
-        border-radius:8px;
+    .top-row, .bottom-row {
+        display:flex;
+        justify-content:space-between;
+        gap:25px;
+        margin-bottom:30px;
     }
+
+    .left-col { width:25%; }
+    .right-col { width:72%; }
+
+    .small-box { width:48%; }
 
     .table-new-elo { border:3px solid red; border-radius:8px; }
 </style>
@@ -43,36 +64,13 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo v26.11.2025 17:29</h1>
+<h1>Calculatrice Elo</h1>
 
-<div class="flex-row">
-    <div class="section elo-box">
-        <h3>Élos initiaux</h3>
-        <table>
-            <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
-            <tr>
-                <td><input type="number" id="eloClassique"></td>
-                <td><input type="number" id="eloRapide"></td>
-                <td><input type="number" id="eloBlitz"></td>
-            </tr>
-        </table>
-    </div>
+<!-- ===================== LIGNE 1 ===================== -->
+<div class="top-row">
 
-    <div class="section elo-box">
-        <h3>Nouveaux Élos</h3>
-        <table class="table-new-elo">
-            <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
-            <tr>
-                <td id="newEloClassique">-</td>
-                <td id="newEloRapide">-</td>
-                <td id="newEloBlitz">-</td>
-            </tr>
-        </table>
-    </div>
-</div>
-
-<div class="flex-row-2">
-    <div class="options-box box-50">
+    <!-- OPTIONS -->
+    <div class="section left-col">
         <h3>Options</h3>
         <label><input type="checkbox" id="mineur"> Je suis né en 2007 ou après</label>
         <label><input type="checkbox" class="is2400" value="classique"> Déjà 2400 en Classique</label>
@@ -80,33 +78,38 @@
         <label><input type="checkbox" class="is2400" value="blitz"> Déjà 2400 en Blitz</label>
     </div>
 
-<h3>Parties du mois</h3>
+    <!-- PARTIES DU MOIS -->
+    <div class="right-col">
+        <h3>Parties du mois</h3>
 
-<table id="tableParties">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Elo Adv</th>
-            <th>Résultat</th>
-            <th>Cadence</th>
-            <th>Note</th>
-            <th>E</th>
-            <th>K</th>
-            <th>Δ</th>
-            <th>Elo après</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+        <table id="tableParties">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Elo Adv</th>
+                    <th>Résultat</th>
+                    <th>Cadence</th>
+                    <th>Note</th>
+                    <th>E</th>
+                    <th>K</th>
+                    <th>Δ</th>
+                    <th>Elo après</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
 
-<button onclick="addRow()">Ajouter une partie</button>
-<button onclick="resetTable()">Réinitialiser</button>
+        <button onclick="addRow()">Ajouter une partie</button>
+        <button onclick="resetTable()">Réinitialiser</button>
+    </div>
 
-    <div>
-        
-<div class="flex-column">
+</div>
 
-    <div class="section box-50">
+<!-- ===================== LIGNE 2 ===================== -->
+<div class="bottom-row">
+
+    <!-- NOMBRE DE PARTIES -->
+    <div class="section small-box">
         <h3>Nombre de parties</h3>
         <table>
             <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
@@ -118,7 +121,8 @@
         </table>
     </div>
 
-    <div class="section box-50">
+    <!-- COEFFICIENTS K -->
+    <div class="section small-box">
         <h3>Coefficients K</h3>
         <table>
             <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
@@ -188,32 +192,16 @@ function calculate(){
     kRapide.textContent=kR;
     kBlitz.textContent=kB;
 
-    let base={
-        classique:parseInt(eloClassique.value)||0,
-        rapide:parseInt(eloRapide.value)||0,
-        blitz:parseInt(eloBlitz.value)||0
-    };
-
-    let cur={...base};
-
     rows.forEach(r=>{
         let adv=parseInt(r.querySelector(".eloAdv").value);
         if(isNaN(adv))return;
+
         let S=parseFloat(r.querySelector(".resultat").value);
         let cad=r.querySelector(".cadence").value;
         let K=cad==="classique"?kC:cad==="rapide"?kR:kB;
-        let E=1/(1+Math.pow(10,(adv-cur[cad])/400));
-        r.querySelector(".E").textContent=E.toFixed(3);
-        r.querySelector(".K").textContent=K;
-        let d=Math.round(K*(S-E));
-        r.querySelector(".delta").textContent=d;
-        cur[cad]+=d;
-        r.querySelector(".eloApres").textContent=cur[cad];
-    });
 
-    newEloClassique.textContent=cur.classique;
-    newEloRapide.textContent=cur.rapide;
-    newEloBlitz.textContent=cur.blitz;
+        let currentElo=document.getElementById("nbClassique");
+    });
 }
 
 function resetTable(){
@@ -222,19 +210,12 @@ function resetTable(){
     nbClassique.textContent=0;
     nbRapide.textContent=0;
     nbBlitz.textContent=0;
-    newEloClassique.textContent="-";
-    newEloRapide.textContent="-";
-    newEloBlitz.textContent="-";
+    kClassique.textContent="-";
+    kRapide.textContent="-";
+    kBlitz.textContent="-";
 }
 
-eloClassique.addEventListener("input",calculate);
-eloRapide.addEventListener("input",calculate);
-eloBlitz.addEventListener("input",calculate);
-mineur.addEventListener("change",calculate);
-document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",calculate));
 </script>
 
 </body>
 </html>
-
-
