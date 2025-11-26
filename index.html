@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Calculatrice Elo FIDE </title>
+<title>Calculatrice Elo FIDE Avancée</title>
 
 <style>
     body {
@@ -76,7 +76,7 @@
     }
 
     th {
-        background:#1976d2;
+        background:#19776d2;
         color:white;
         padding:10px;
     }
@@ -203,23 +203,24 @@ function addRow() {
     tbody.appendChild(tr);
 }
 
-// Calcule le K selon les règles FIDE que tu m'as données
+// Fonction de calcul du K d'une cadence
 function computeK(cadence, nbCadence, isMineur, is2400List) {
 
-    // Si joueur a été 2400+ dans cette cadence → K=10
+    // 2400+ dans cette cadence → K=10
     if (is2400List.includes(cadence)) return 10;
 
     // Base K
     let baseK = isMineur ? 40 : 20;
 
-    // Dégressivité : K = min(baseK, floor(700 / nbPartiesCadence))
     if (nbCadence === 0) return baseK;
 
+    // Dégressivité FIDE : nb × K ≤ 700
     let kEff = Math.floor(700 / nbCadence);
+
+    // K = min(baseK, kEff), mais jamais < 10
     return Math.max(10, Math.min(baseK, kEff));
 }
 
-// Calcul global
 function calculate() {
     let elo = parseInt(document.getElementById("eloInitial").value);
     if (isNaN(elo)) {
@@ -229,24 +230,25 @@ function calculate() {
 
     let isMineur = document.getElementById("mineur").checked;
 
-    // Cadences où le joueur a déjà été 2400+
+    // Cadences où le joueur a été 2400+
     let is2400List = Array.from(document.getElementById("cadence2400").selectedOptions).map(o => o.value);
 
-    // Compter parties par cadence
+    // Tableaux
     let rows = document.querySelectorAll("#tableParties tbody tr");
 
+    // Compte des parties par cadence
     let countCad = {classique:0, rapide:0, blitz:0};
     rows.forEach(r => {
         let cad = r.querySelector(".cadence").value;
         countCad[cad]++;
     });
 
-    // Calcul K pour chaque cadence
+    // Calcul des K par cadence
     let Kclassique = computeK("classique", countCad.classique, isMineur, is2400List);
     let Krapide    = computeK("rapide",    countCad.rapide,    isMineur, is2400List);
     let Kblitz     = computeK("blitz",     countCad.blitz,     isMineur, is2400List);
 
-    // Affichage
+    // Affichage des blocs K
     document.getElementById("kClassiqueBox").innerHTML = "K Classique : " + Kclassique;
     document.getElementById("kRapideBox").innerHTML    = "K Rapide : " + Krapide;
     document.getElementById("kBlitzBox").innerHTML     = "K Blitz : " + Kblitz;
@@ -287,7 +289,7 @@ function calculate() {
         `<b>Elo final :</b> ${elo} <br><b>Total Δ Elo :</b> ${totalDelta}`;
 }
 
-// Réinitialisation
+// Réinitialiser
 function resetTable() {
     document.querySelector("#tableParties tbody").innerHTML = "";
     count = 0;
