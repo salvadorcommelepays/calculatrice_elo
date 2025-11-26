@@ -45,7 +45,7 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo v26.11.2025 18:39</h1>
+<h1>Calculatrice Elo v26.11.2025 18:55</h1>
 
 <!-- ========= LIGNE 1 — Élos initiaux + Nouveaux Élos ========= -->
 <div class="row">
@@ -196,7 +196,7 @@ const fideTable = [
 ];
 function fideExpectedScore(myElo, advElo) {
     let diff = Math.abs(myElo - advElo);
-
+  diff = Math.min(diff, 400);
     for (let row of fideTable) {
         if (diff >= row.min && diff <= row.max) {
             if (myElo >= advElo) return row.H;
@@ -318,6 +318,7 @@ document.querySelectorAll(".is2400").forEach(cb=>cb.addEventListener("change",ca
 
 </body>
 </html>
+
 
 
 
