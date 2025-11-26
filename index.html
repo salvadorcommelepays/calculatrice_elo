@@ -25,34 +25,22 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo FIDE Avancée</h1>
+<h1>Calculatrice Elo FIDE </h1>
 
 <div class="section">
-    <h3>Élos initiaux</h3>
-    <table>
-        <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
-        <tr>
-            <td><input type="number" id="eloClassique"></td>
-            <td><input type="number" id="eloRapide"></td>
-            <td><input type="number" id="eloBlitz"></td>
-        </tr>
-    </table>
+  <h3>Avertissement</h3>
+<div class="section" style="background:#fff7d6;border-left:4px solid #ffb300;">
+    <p style="margin:0;font-size:15px;">
+        Veuillez descendre plus bas pour remplir les parties du mois voulu.<br><br>
+        Attention : la FIDE inclut parfois, dans un même mois de traitement, 
+        des tournois joués les 29, 30 ou 31 du mois précédent.  
+        Dans ce cas, l’Elo utilisé peut être celui du début du mois suivant, 
+        et donc différent de celui que vous aviez réellement en fin de mois.
+    </p>
 </div>
 
+<h3>Nombre de parties</h3>
 <div class="section">
-    <h3>Nouveaux Élos</h3>
-    <table>
-        <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
-        <tr>
-            <td id="newEloClassique">-</td>
-            <td id="newEloRapide">-</td>
-            <td id="newEloBlitz">-</td>
-        </tr>
-    </table>
-</div>
-
-<div class="section">
-    <h3>Nombre de parties</h3>
     <table>
         <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
         <tr>
@@ -63,13 +51,8 @@
     </table>
 </div>
 
+<h3>Coefficients K</h3>
 <div class="section">
-    <h3>Coefficients K</h3>
-    <label><input type="checkbox" id="mineur"> Je suis mineur</label>
-    <label><input type="checkbox" class="is2400" value="classique"> Classique 2400+</label>
-    <label><input type="checkbox" class="is2400" value="rapide"> Rapide 2400+</label>
-    <label><input type="checkbox" class="is2400" value="blitz"> Blitz 2400+</label>
-
     <table>
         <tr><th>Classique</th><th>Rapide</th><th>Blitz</th></tr>
         <tr>
@@ -80,7 +63,10 @@
     </table>
 </div>
 
-<h3>Parties</h3>
+<h3>Parties du mois</h3>
+<p style="margin-top:-10px;margin-bottom:15px;font-size:14px;color:#555;">
+    Renseignez ici, une par une, les parties jouées pendant le mois sélectionné.
+</p>
 
 <table id="tableParties">
     <thead>
@@ -216,5 +202,6 @@ function resetTable() {
 
 </body>
 </html>
+
 
 
