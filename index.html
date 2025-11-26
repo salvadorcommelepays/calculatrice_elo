@@ -124,29 +124,6 @@ function updateCounts() {
     nbBlitz.textContent = c.blitz;
 }
 
-function updateNewElos() {
-    let eC = parseInt(eloClassique.value) || 0;
-    let eR = parseInt(eloRapide.value) || 0;
-    let eB = parseInt(eloBlitz.value) || 0;
-
-    let rows = document.querySelectorAll("#tableParties tbody tr");
-    let delta = {classique:0, rapide:0, blitz:0};
-
-    rows.forEach(r => {
-        let cad = r.querySelector(".cadence").value;
-        let d = parseInt(r.querySelector(".delta").textContent);
-        if (!isNaN(d)) delta[cad] += d;
-    });
-
-    let fC = eC + delta.classique;
-    let fR = eR + delta.rapide;
-    let fB = eB + delta.blitz;
-
-    newEloClassique.innerHTML = fC > eC ? `<span class='elo-green'>${fC}</span>` : `<span class='elo-red'>${fC}</span>`;
-    newEloRapide.innerHTML    = fR > eR ? `<span class='elo-green'>${fR}</span>` : `<span class='elo-red'>${fR}</span>`;
-    newEloBlitz.innerHTML     = fB > eB ? `<span class='elo-green'>${fB}</span>` : `<span class='elo-red'>${fB}</span>`;
-}
-
 function addRow() {
     count++;
     let tr = document.createElement("tr");
@@ -162,21 +139,24 @@ function addRow() {
         <td class="eloApres"></td>
     `;
     tableParties.querySelector("tbody").appendChild(tr);
-    tr.querySelector(".cadence").addEventListener("change", () => { calculate(); });
+
+    tr.querySelector(".cadence").addEventListener("change", calculate);
     calculate();
 }
 
 function calculate() {
     updateCounts();
 
+    // valeurs des checkboxes
     let mineurVal = mineur.checked;
     let list2400 = Array.from(document.querySelectorAll(".is2400:checked")).map(x => x.value);
 
+    // comptage des parties par cadence
     let rows = document.querySelectorAll("#tableParties tbody tr");
     let countCad = {classique:0, rapide:0, blitz:0};
-
     rows.forEach(r => countCad[r.querySelector(".cadence").value]++);
 
+    // calcul des coefficients K par cadence
     let kC = computeK("classique", countCad.classique, mineurVal, list2400);
     let kR = computeK("rapide", countCad.rapide, mineurVal, list2400);
     let kB = computeK("blitz", countCad.blitz, mineurVal, list2400);
@@ -185,6 +165,7 @@ function calculate() {
     kRapide.textContent = kR;
     kBlitz.textContent = kB;
 
+    // Élos initiaux
     let base = {
         classique: parseInt(eloClassique.value) || 0,
         rapide: parseInt(eloRapide.value) || 0,
@@ -193,6 +174,7 @@ function calculate() {
 
     let cur = {...base};
 
+    // calcul partie par partie
     rows.forEach(r => {
         let adv = parseInt(r.querySelector(".eloAdv").value);
         if (isNaN(adv)) return;
@@ -204,6 +186,7 @@ function calculate() {
 
         let E = 1 / (1 + Math.pow(10, (adv - cur[cad]) / 400));
         r.querySelector(".E").textContent = E.toFixed(3);
+        r.querySelector(".K").textContent = K;
 
         let d = Math.round(K * (S - E));
         r.querySelector(".delta").textContent = d;
@@ -212,12 +195,10 @@ function calculate() {
         r.querySelector(".eloApres").textContent = cur[cad];
     });
 
-    newEloClassique.innerHTML = cur.classique > base.classique ? `<span class="elo-green">${cur.classique}</span>` : `<span class="elo-red">${cur.classique}</span>`;
-    newEloRapide.innerHTML    = cur.rapide > base.rapide ? `<span class="elo-green">${cur.rapide}</span>` : `<span class="elo-red">${cur.rapide}</span>`;
-    newEloBlitz.innerHTML     = cur.blitz > base.blitz ? `<span class="elo-green">${cur.blitz}</span>` : `<span class="elo-red">${cur.blitz}</span>`;
-});
-
-    updateNewElos();
+    // mise à jour affichage final
+    newEloClassique.innerHTML = cur.classique >= base.classique ? `<span class="elo-green">${cur.classique}</span>` : `<span class="elo-red">${cur.classique}</span>`;
+    newEloRapide.innerHTML    = cur.rapide   >= base.rapide   ? `<span class="elo-green">${cur.rapide}</span>`   : `<span class="elo-red">${cur.rapide}</span>`;
+    newEloBlitz.innerHTML     = cur.blitz    >= base.blitz    ? `<span class="elo-green">${cur.blitz}</span>`    : `<span class="elo-red">${cur.blitz}</span>`;
 }
 
 function resetTable() {
@@ -232,6 +213,8 @@ function resetTable() {
 }
 </script>
 
+
 </body>
 </html>
+
 
