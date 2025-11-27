@@ -46,6 +46,10 @@
     gap: 15px; /* espace entre le texte et la case */
     padding-right: 10px;
 }
+    .options-box label span {
+    flex: 1;           /* ⬅ le texte prend tout l'espace */
+    max-width: 300px;  /* ⬅ ajuste cette valeur comme tu veux */
+}
 
 .options-box input[type="checkbox"] {
     margin: 0;
@@ -57,7 +61,7 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo v1.9</h1>
+<h1>Calculatrice Elo v1.10</h1>
 
 <!-- ========= LIGNE 1 — Élos initiaux + Nouveaux Élos ========= -->
 <div class="row">
@@ -161,6 +165,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
