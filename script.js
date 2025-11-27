@@ -31,18 +31,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-  function computeK(c, n, m, list2400, listFirst30, listBorn2300) {
-    //  RÈGLE 1 — 30 premières parties : toujours K = 40
+ function computeK(c, n, m, list2400, listFirst30, listBorn2300) {
+
+    // PRIORITÉ 1 → 30 premières parties : K = 40
     if (listFirst30.includes(c)) return 40;
-    //  RÈGLE 2 — Mineur + déjà eu 2300 → K = 20
-    if (m && listBorn2300.includes(c)) return 20;
-    //  RÈGLE 3 — Déjà eu 2400 → K = 10
+
+    // PRIORITÉ 2 → Avoir déjà eu 2300 (si né en 2007+)
+    // prime sur la règle mineur
+    if (listBorn2300.includes(c)) return 20;
+
+    // PRIORITÉ 3 → Avoir déjà eu 2400
     if (list2400.includes(c)) return 10;
-    //  RÈGLE 4 — règle normale mineur/non-mineur
+
+    // PRIORITÉ 4 → règles normales mineur / non mineur
     let baseK = m ? 40 : 20;
+
     if (n === 0) return baseK;
+
     return Math.max(10, Math.min(baseK, Math.floor(700 / n)));
 }
+
 
 
     function updateCounts() {
@@ -142,5 +150,8 @@ let kB = computeK("blitz", countCad.blitz, m, list2400, listFirst30, listBorn230
     eloBlitz.addEventListener("input", calculate);
     mineur.addEventListener("change", calculate);
     document.querySelectorAll(".is2400").forEach(cb => cb.addEventListener("change", calculate));
+    document.querySelectorAll(".first30").forEach(cb => cb.addEventListener("change", calculate));
+document.querySelectorAll(".born2007_2300").forEach(cb => cb.addEventListener("change", calculate));
 });
+
 
