@@ -144,14 +144,24 @@ let kB = computeK("blitz", countCad.blitz, m, list2400, listFirst30, listBorn230
     window.addRow = addRow;
     window.resetTable = resetTable;
 
-    /* listeners initiaux */
-    eloClassique.addEventListener("input", calculate);
-    eloRapide.addEventListener("input", calculate);
-    eloBlitz.addEventListener("input", calculate);
-    mineur.addEventListener("change", calculate);
-    document.querySelectorAll(".is2400").forEach(cb => cb.addEventListener("change", calculate));
-    document.querySelectorAll(".first30").forEach(cb => cb.addEventListener("change", calculate));
-document.querySelectorAll(".born2007_2300").forEach(cb => cb.addEventListener("change", calculate));
+ /* listeners initiaux */
+eloClassique.addEventListener("input", calculate);
+eloRapide.addEventListener("input", calculate);
+eloBlitz.addEventListener("input", calculate);
+mineur.addEventListener("change", calculate);
+// déjà eu 2400
+document.querySelectorAll(".is2400").forEach(cb => 
+    cb.addEventListener("change", calculate)
+);
+//  30 premières parties
+document.querySelectorAll(".first30").forEach(cb => 
+    cb.addEventListener("change", calculate)
+);
+//  Né 2007+ & déjà 2300
+document.querySelectorAll(".born2007_2300").forEach(cb => 
+    cb.addEventListener("change", calculate)
+);
 });
+
 
 
