@@ -31,12 +31,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function computeK(c, n, m, list2400) {
-        if (list2400.includes(c)) return 10;
-        let b = m ? 40 : 20;
-        if (n === 0) return b;
-        return Math.max(10, Math.min(b, Math.floor(700 / n)));
-    }
+  function computeK(c, n, m, list2400, listFirst30, listBorn2300) {
+    //  RÈGLE 1 — 30 premières parties : toujours K = 40
+    if (listFirst30.includes(c)) return 40;
+    //  RÈGLE 2 — Mineur + déjà eu 2300 → K = 20
+    if (m && listBorn2300.includes(c)) return 20;
+    //  RÈGLE 3 — Déjà eu 2400 → K = 10
+    if (list2400.includes(c)) return 10;
+    //  RÈGLE 4 — règle normale mineur/non-mineur
+    let baseK = m ? 40 : 20;
+    if (n === 0) return baseK;
+    return Math.max(10, Math.min(baseK, Math.floor(700 / n)));
+}
+
 
     function updateCounts() {
         let rows = document.querySelectorAll("#tableParties tbody tr");
@@ -68,16 +75,19 @@ document.addEventListener("DOMContentLoaded", () => {
     function calculate() {
         updateCounts();
 
-        let m = mineur.checked;
-        let list2400 = Array.from(document.querySelectorAll(".is2400:checked")).map(x => x.value);
+       let m = mineur.checked;
+let list2400 = Array.from(document.querySelectorAll(".is2400:checked")).map(x => x.value);
+let listFirst30 = Array.from(document.querySelectorAll(".first30:checked")).map(x => x.value);
+let listBorn2300 = Array.from(document.querySelectorAll(".born2007_2300:checked")).map(x => x.value);
 
         let rows = document.querySelectorAll("#tableParties tbody tr");
         let countCad = {classique:0, rapide:0, blitz:0};
         rows.forEach(r => countCad[r.querySelector(".cadence").value]++);
 
-        let kC = computeK("classique", countCad.classique, m, list2400);
-        let kR = computeK("rapide", countCad.rapide, m, list2400);
-        let kB = computeK("blitz", countCad.blitz, m, list2400);
+      let kC = computeK("classique", countCad.classique, m, list2400, listFirst30, listBorn2300);
+let kR = computeK("rapide", countCad.rapide, m, list2400, listFirst30, listBorn2300);
+let kB = computeK("blitz", countCad.blitz, m, list2400, listFirst30, listBorn2300);
+
 
         kClassique.textContent = kC;
         kRapide.textContent = kR;
@@ -133,3 +143,4 @@ document.addEventListener("DOMContentLoaded", () => {
     mineur.addEventListener("change", calculate);
     document.querySelectorAll(".is2400").forEach(cb => cb.addEventListener("change", calculate));
 });
+
