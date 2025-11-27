@@ -40,9 +40,11 @@
     /* Alignement des cases à droite du bloc Options */
 .options-box label {
     display: flex;
-    justify-content: space-between; /* texte à gauche, case à droite */
+    flex-direction: row-reverse;   /* ← renverse l’ordre */
+    justify-content: space-between;
     align-items: center;
-    padding-right: 10px; /* espace à droite */
+    gap: 15px; /* espace entre le texte et la case */
+    padding-right: 10px;
 }
 
 .options-box input[type="checkbox"] {
@@ -55,7 +57,7 @@
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo v1.8</h1>
+<h1>Calculatrice Elo v1.9</h1>
 
 <!-- ========= LIGNE 1 — Élos initiaux + Nouveaux Élos ========= -->
 <div class="row">
@@ -159,6 +161,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
