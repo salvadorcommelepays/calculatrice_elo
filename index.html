@@ -31,19 +31,31 @@
     /* LAYOUT LIGNES */
     .row { display:flex; justify-content:space-between; gap:25px; margin-bottom:35px; }
     .col-50 { width:48%; }
-    .col-30 { width:40%; }
+    .col-30 { width:30%; }
     .col-70 { width:68%; }
 
     .small-box { width:48%; }
 
     .table-new-elo { border:3px solid red; border-radius:8px; }
+    /* Alignement des cases à droite du bloc Options */
+.options-box label {
+    display: flex;
+    justify-content: space-between; /* texte à gauche, case à droite */
+    align-items: center;
+    padding-right: 10px; /* espace à droite */
+}
+
+.options-box input[type="checkbox"] {
+    margin: 0;
+}
+
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<h1>Calculatrice Elo v1.7</h1>
+<h1>Calculatrice Elo v1.8</h1>
 
 <!-- ========= LIGNE 1 — Élos initiaux + Nouveaux Élos ========= -->
 <div class="row">
@@ -147,6 +159,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
